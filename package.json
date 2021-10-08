@@ -1,26 +1,46 @@
 {
-	"name": "vscode-graphql-notebooks",
-	"displayName": "vscode-graphql-notebooks",
-	"description": "",
+	"name": "github-graphql-nb",
+	"displayName": "GitHub GraphQL Notebooks",
+	"publisher": "joyceerhl",
+	"description": "Interactively run GraphQL queries and mutations in VS Code",
+	"repository": {
+		"url": "https://github.com/joyceerhl/vscode-github-graphql-notebooks"
+	},
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
 	"categories": [
-		"Other"
+		"Notebooks"
+	],
+	"keywords": [
+		"GitHub",
+		"GraphQL"
+	],
+	"extensionDependencies": [
+		"graphql.vscode-graphql"
 	],
 	"activationEvents": [
-		"onCommand:vscode-graphql-notebooks.helloWorld",
-		"onNotebook:github-graphql-nb"
+		"onNotebook:github-graphql-nb",
+		"onCommand:github-graphql-nb.createnew"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-graphql-notebooks.helloWorld",
-				"title": "Hello World"
+				"command": "github-graphql-nb.createnew",
+				"title": "Create New GitHub GraphQL Notebook",
+				"shortTitle": "GitHub GraphQL Notebook",
+				"category": "GitHub GraphQL"
 			}
 		],
+		"menus": {
+			"file/newFile": [
+                {
+                    "command": "github-graphql-nb.createnew"
+                }
+            ]
+		},
 		"notebooks": [
 			{
 				"type": "github-graphql-nb",

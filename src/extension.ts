@@ -1,18 +1,18 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import { Octokit } from '@octokit/core';
 import fetch from 'node-fetch';
 import * as vscode from 'vscode';
-// import * as Octokit from "@octokit/graphql";
 import { authentication, AuthenticationSession } from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	const controller = new OctokitController();
 	// Register notebook serializer
 	const serializer = new NotebookSerializer();
 	vscode.workspace.registerNotebookSerializer('github-graphql-nb', serializer);
+	vscode.commands.registerCommand('github-graphql-nb.createnew', async () => {
+		const data = serializer.createNew();
+		const notebookDocument = await vscode.workspace.openNotebookDocument('github-graphql-nb', data);
+		await vscode.commands.executeCommand('vscode.openWith', notebookDocument.uri, 'github-graphql-nb');
+	});
 }
 
 // this method is called when your extension is deactivated
@@ -22,15 +22,21 @@ export function deactivate() {}
 const authorizationScopes = ['repo', 'workflow'];
 
 class NotebookSerializer implements vscode.NotebookSerializer {
-	serializeNotebook(data: vscode.NotebookData, token: vscode.CancellationToken): Uint8Array | Thenable<Uint8Array> {
+	createNew(): vscode.NotebookData {
+		const language = 'graphql';
+		const cell = new vscode.NotebookCellData(vscode.NotebookCellKind.Code, '', language);
+		return new vscode.NotebookData([cell]);
+	}
+
+	serializeNotebook(data: vscode.NotebookData, token?: vscode.CancellationToken): Uint8Array {
 		const cells = data.cells.map((cell) => {
 			return { code: cell.value, kind: cell.kind === vscode.NotebookCellKind.Markup ? 'markdown' : 'code' };
 		});
 		return new TextEncoder().encode(JSON.stringify({ cells }));
 	}
 
-	deserializeNotebook(content: Uint8Array, token: vscode.CancellationToken): vscode.NotebookData | Thenable<vscode.NotebookData> {
-		const stringified = new TextDecoder().decode(content);
+	deserializeNotebook(content: Uint8Array, token: vscode.CancellationToken): vscode.NotebookData {
+		const stringified = content.length === 0 ? new TextDecoder().decode(this.serializeNotebook(this.createNew())) : new TextDecoder().decode(content);
 		const data = JSON.parse(stringified);
 		if (!('cells' in data)) {
 			throw new Error('Unable to parse provided notebook content, missing required `cells` property.');
@@ -65,6 +71,27 @@ class OctokitController {
 
 	constructor() {
 		this.controller = vscode.notebooks.createNotebookController('github-graphql', 'github-graphql-nb', 'GitHub GraphQL', (cells, notebook, c) => this.executeCells(cells, notebook, c));
+	}
+
+	private async executeCells(cells: vscode.NotebookCell[], notebook: vscode.NotebookDocument, controller: vscode.NotebookController) {
+		for (const cell of cells) {
+			await this.executeCell(cell);
+		}
+	}
+
+	private async executeCell(cell: vscode.NotebookCell) {
+		const task = this.controller.createNotebookCellExecution(cell);
+		task.start(Date.now());
+		const code = cell.document.getText();
+		let success = false;
+		try {
+			const resp = await this.graphql(code);
+			success = true;
+			replaceOutput(task, resp);
+		} catch (e) {
+			replaceOutput(task, e);
+		}
+		task.end(success, Date.now());
 	}
 
 	private async graphql<T>(query: string): Promise<T | undefined> {
@@ -111,36 +138,29 @@ class OctokitController {
 		if (this._session === undefined) {
 			async function waitUntilAuthenticated() {
 				try {
-					return await authentication.getSession('github', authorizationScopes, {
+					const session = await authentication.getSession('github', authorizationScopes, {
 						createIfNone: true,
-						forceNewSession: force,
-					} as any);
-				} catch {
-					try {
-						const session = await authentication.getSession('github', authorizationScopes, {
-							createIfNone: false,
-						});
-						if (session !== undefined) return session;
-					} catch {}
-
-					return new Promise<AuthenticationSession>(resolve => {
-						async function getSession() {
-							const session = await authentication.getSession('github', authorizationScopes, {
-								createIfNone: true,
-							});
-							if (session !== undefined) {
-								resolve(session);
-							}
-						}
-
-						const disposable = authentication.onDidChangeSessions(async e => {
-							if (e.provider.id === 'github') {
-								disposable.dispose();
-								await getSession();
-							}
-						});
 					});
-				}
+					if (session !== undefined) return session;
+				} catch {}
+
+				return new Promise<AuthenticationSession>(resolve => {
+					async function getSession() {
+						const session = await authentication.getSession('github', authorizationScopes, {
+							createIfNone: true,
+						});
+						if (session !== undefined) {
+							resolve(session);
+						}
+					}
+
+					const disposable = authentication.onDidChangeSessions(async e => {
+						if (e.provider.id === 'github') {
+							disposable.dispose();
+							await getSession();
+						}
+					});
+				});
 			}
 
 			this._session = await waitUntilAuthenticated();
@@ -164,27 +184,6 @@ class OctokitController {
 		this._session = undefined;
 		this._octokit = undefined;
 		this._octokitDefaults = undefined;
-	}
-
-	private async executeCells(cells: vscode.NotebookCell[], notebook: vscode.NotebookDocument, controller: vscode.NotebookController) {
-		for (const cell of cells) {
-			await this.executeCell(cell);
-		}
-	}
-
-	private async executeCell(cell: vscode.NotebookCell) {
-		const task = this.controller.createNotebookCellExecution(cell);
-		task.start(Date.now());
-		const code = cell.document.getText();
-		let success = false;
-		try {
-			const resp = await this.graphql(code);
-			success = true;
-			replaceOutput(task, resp);
-		} catch (e) {
-			replaceOutput(task, e);
-		}
-		task.end(success, Date.now());
 	}
 }
 
