@@ -2,11 +2,11 @@
 	"name": "github-graphql-nb",
 	"displayName": "GitHub GraphQL Notebooks",
 	"publisher": "joyceerhl",
-	"description": "Interactively run GraphQL queries and mutations in VS Code",
+	"description": "Interactively run GitHub GraphQL queries and mutations in VS Code",
 	"repository": {
 		"url": "https://github.com/joyceerhl/vscode-github-graphql-notebooks"
 	},
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
@@ -36,10 +36,10 @@
 		],
 		"menus": {
 			"file/newFile": [
-                {
-                    "command": "github-graphql-nb.createnew"
-                }
-            ]
+				{
+					"command": "github-graphql-nb.createnew"
+				}
+			]
 		},
 		"notebooks": [
 			{
