@@ -63,6 +63,8 @@ class NotebookSerializer implements vscode.NotebookSerializer {
 	}
 }
 
+const variablesRegex = /^\s*variables\s*(\{[^}]*\})\s*$/m;
+
 class OctokitController {
 	private _octokit: Octokit | undefined;
 	private _octokitDefaults: typeof Octokit | undefined;
@@ -82,10 +84,23 @@ class OctokitController {
 	private async executeCell(cell: vscode.NotebookCell) {
 		const task = this.controller.createNotebookCellExecution(cell);
 		task.start(Date.now());
-		const code = cell.document.getText();
+
+		const contents = cell.document.getText();
+
+		let code: string;
+		let variables: Record<string, unknown> | undefined;
+		const match = contents.match(variablesRegex);
+		if (match) {
+			const variablesString = match[1];
+			variables = JSON.parse(variablesString);
+			code = contents.replace(variablesRegex, '').trim();
+		} else {
+			code = contents.trim();
+		}
+
 		let success = false;
 		try {
-			const resp = await this.graphql(code);
+			const resp = await this.graphql(code, variables);
 			success = true;
 			replaceOutput(task, resp);
 		} catch (e) {
@@ -94,13 +109,13 @@ class OctokitController {
 		task.end(success, Date.now());
 	}
 
-	private async graphql<T>(query: string): Promise<T | undefined> {
+	private async graphql<T>(query: string, variables?: Record<string, unknown>): Promise<T | undefined> {
 		if (this._octokit === undefined) {
 			this._octokit = await this.octokit();
 		}
 
 		try {
-			return await this._octokit.graphql<T>(query);
+			return await this._octokit.graphql<T>(query, variables);
 		} catch (ex) {
 			throw ex;
 		}
