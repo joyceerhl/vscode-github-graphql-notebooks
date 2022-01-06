@@ -91,8 +91,14 @@ class OctokitController {
 		let variables: Record<string, unknown> | undefined;
 		const match = contents.match(variablesRegex);
 		if (match) {
-			const variablesString = match[1];
-			variables = JSON.parse(variablesString);
+			try {
+				variables = JSON.parse(match[1]);
+			} catch (e) {
+				replaceOutput(task, `Unable to parse 'variables': ${String(e)}`);
+				task.end(false, Date.now());
+				return;
+			}
+
 			code = contents.replace(variablesRegex, '').trim();
 		} else {
 			code = contents.trim();
