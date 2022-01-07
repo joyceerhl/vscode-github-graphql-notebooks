@@ -45,7 +45,7 @@
 			{
 				"type": "github-graphql-nb",
 				"displayName": "GitHub GraphQL Notebook",
-				"priority": "option",
+				"priority": "default",
 				"selector": [
 					{
 						"filenamePattern": "*.github-graphql-nb"
