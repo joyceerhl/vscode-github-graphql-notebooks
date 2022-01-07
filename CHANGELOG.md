@@ -1,9 +1,18 @@
 # Change Log
 
-All notable changes to the "vscode-graphql-notebooks" extension will be documented in this file.
+## [0.0.3] - 2022-01-06
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- You can now use variables with your queries as follows:
+  ```graphql
+  query ($owner: String!,	$repo: String!) { 
+    repository(owner: $owner, name: $repo) {
+        name
+    }
+  }
 
-## [Unreleased]
-
-- Initial release
+  variables {
+    "owner": "eamodio",
+    "repo": "vscode-gitlens"
+  }
+  ```
+  (Thanks [@eamodio](https://github.com/eamodio)!)
