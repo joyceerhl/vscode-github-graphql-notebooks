@@ -50,7 +50,11 @@ class NotebookSerializer implements vscode.NotebookSerializer {
 			}
 			if (cell.hasOwnProperty('code') && cell.hasOwnProperty('kind') && 'kind' in cell) {
 				const graphqlCell = cell as unknown as { code: string, kind: 'markdown' | 'code' };
-				return new vscode.NotebookCellData(graphqlCell.kind === 'code' ? vscode.NotebookCellKind.Code : vscode.NotebookCellKind.Markup, graphqlCell.code, 'graphql')
+				return new vscode.NotebookCellData(
+					graphqlCell.kind === 'code' ? vscode.NotebookCellKind.Code : vscode.NotebookCellKind.Markup,
+					graphqlCell.code,
+					graphqlCell.kind === 'code' ? 'graphql' : 'markdown',
+				);
 			}
 		});
 		const cellData = [];

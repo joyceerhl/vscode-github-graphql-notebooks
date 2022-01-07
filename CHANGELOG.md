@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.4] - 2022-01-06
+
+- Markdown cells now render correctly
+
 ## [0.0.3] - 2022-01-06
 
 - You can now use variables with your queries as follows:
