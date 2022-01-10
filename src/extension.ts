@@ -166,7 +166,9 @@ class OctokitController {
 					const session = await authentication.getSession('github', authorizationScopes, {
 						createIfNone: true,
 					});
-					if (session !== undefined) return session;
+					if (session !== undefined) {
+						return session;
+					}
 				} catch {}
 
 				return new Promise<AuthenticationSession>(resolve => {

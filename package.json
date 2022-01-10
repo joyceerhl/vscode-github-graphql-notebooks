@@ -6,7 +6,8 @@
 	"repository": {
 		"url": "https://github.com/joyceerhl/vscode-github-graphql-notebooks"
 	},
-	"version": "0.0.4",
+	"version": "0.0.5",
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
@@ -17,14 +18,12 @@
 		"GitHub",
 		"GraphQL"
 	],
-	"extensionDependencies": [
-		"graphql.vscode-graphql"
-	],
 	"activationEvents": [
 		"onNotebook:github-graphql-nb",
 		"onCommand:github-graphql-nb.createnew"
 	],
-	"main": "./dist/extension.js",
+	"browser": "./dist/browser/extension",
+	"main": "./dist/extension",
 	"contributes": {
 		"commands": [
 			{
@@ -32,6 +31,22 @@
 				"title": "Create New GitHub GraphQL Notebook",
 				"shortTitle": "GitHub GraphQL Notebook",
 				"category": "GitHub GraphQL"
+			}
+		],
+		"languages": [
+			{
+			  "id": "graphql",
+			  "aliases": [
+				"GraphQL",
+				"graphql"
+			  ]
+			}
+		  ],
+		  "grammars": [
+			{
+			  "language": "graphql",
+			  "path": "./grammars/graphql.json",
+			  "scopeName": "source.graphql"
 			}
 		],
 		"menus": {
@@ -63,10 +78,13 @@
 		"test-watch": "tsc -watch -p ./",
 		"pretest": "npm run test-compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"serve": "npx serve --cors -l 5000",
+		"tunnel": "npx localtunnel -p 5000"
 	},
 	"dependencies": {
 		"@octokit/core": "3.5.1",
+		"cross-fetch": "3.0.6",
 		"node-fetch": "3.0.0"
 	},
 	"devDependencies": {

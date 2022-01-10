@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.5] - 2022-01-09
+
+- This extension now works in https://vscode.dev and https://github.dev
+- github-graphql-nb file types now open in the notebook UI by default
+
 ## [0.0.4] - 2022-01-06
 
 - Markdown cells now render correctly
