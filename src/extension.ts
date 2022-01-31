@@ -218,7 +218,7 @@ class OctokitController {
 function replaceOutput(task: vscode.NotebookCellExecution, jsonData: unknown) {
 	let data;
 	if (vscode.env.uiKind === vscode.UIKind.Web) {
-		data = new TextEncoder().encode(JSON.stringify(jsonData));
+		data = new TextEncoder().encode(JSON.stringify(jsonData, undefined, 4));
 	} else {
 		data = Buffer.from(JSON.stringify(jsonData, undefined, 4));
 	}
