@@ -223,7 +223,7 @@ function replaceOutput(task: vscode.NotebookCellExecution, jsonData: unknown) {
 	} else {
 		data = Buffer.from(stringified);
 	}
-	const item = new vscode.NotebookCellOutputItem(data, 'application/json');
+	const item = new vscode.NotebookCellOutputItem(data, 'text/x-json');
 	const output = new vscode.NotebookCellOutput([item]);
 	task.replaceOutput(output);
 }

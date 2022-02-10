@@ -8,6 +8,7 @@
 	},
 	"version": "0.0.6",
 	"license": "MIT",
+	"extensionDependencies": ["rebornix.vscode-code-renderer"],
 	"engines": {
 		"vscode": "^1.60.0"
 	},
