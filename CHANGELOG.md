@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.0.7] - 2022-02-09
+
+- Use `rebornix.vscode-code-renderer` extension to render JSON notebook output
+- Fix GraphQL language configuration
+
+## [0.0.6] - 2022-02-03
+
+- Add missing JSON indentation on web
+
 ## [0.0.5] - 2022-01-09
 
 - This extension now works in https://vscode.dev and https://github.dev
@@ -12,8 +21,9 @@
 ## [0.0.3] - 2022-01-06
 
 - You can now use variables with your queries as follows:
+
   ```graphql
-  query ($owner: String!,	$repo: String!) { 
+  query ($owner: String!,	$repo: String!) {
     repository(owner: $owner, name: $repo) {
         name
     }
@@ -24,4 +34,5 @@
     "repo": "vscode-gitlens"
   }
   ```
+
   (Thanks [@eamodio](https://github.com/eamodio)!)
