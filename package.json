@@ -6,9 +6,8 @@
 	"repository": {
 		"url": "https://github.com/joyceerhl/vscode-github-graphql-notebooks"
 	},
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"license": "MIT",
-	"extensionDependencies": ["rebornix.vscode-code-renderer"],
 	"engines": {
 		"vscode": "^1.64.0"
 	},
