@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.1.0] - 2022-04-03
+
+- Serializer has moved to the VS Code GraphQL Notebook extension, which remains compatible with VS Code for the Web. You can continue to open `*.github-graphql-nb` files with the generic GraphQL notebook serializer
+- This extension now provides a convenience layer for running GitHub API queries as an alternative to configuring an endpoint using a `graphql-config` file
+
 ## [0.0.7] - 2022-02-09
 
 - Use `rebornix.vscode-code-renderer` extension to render JSON notebook output
