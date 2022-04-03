@@ -18,21 +18,14 @@
 		"GitHub",
 		"GraphQL"
 	],
+	"extensionDependencies": ["joyceerhl.vscode-graphql-notebook"],
 	"activationEvents": [
-		"onNotebook:github-graphql-nb",
-		"onCommand:github-graphql-nb.createnew"
+		"onNotebook:gqlnb",
+		"onNotebook:github-graphql-nb"
 	],
 	"browser": "./dist/browser/extension",
 	"main": "./dist/extension",
 	"contributes": {
-		"commands": [
-			{
-				"command": "github-graphql-nb.createnew",
-				"title": "Create New GitHub GraphQL Notebook",
-				"shortTitle": "GitHub GraphQL Notebook",
-				"category": "GitHub GraphQL"
-			}
-		],
 		"languages": [
 			{
 			  "id": "graphql",
@@ -48,25 +41,6 @@
 			  "language": "graphql",
 			  "path": "./grammars/graphql.json",
 			  "scopeName": "source.graphql"
-			}
-		],
-		"menus": {
-			"file/newFile": [
-				{
-					"command": "github-graphql-nb.createnew"
-				}
-			]
-		},
-		"notebooks": [
-			{
-				"type": "github-graphql-nb",
-				"displayName": "GitHub GraphQL Notebook",
-				"priority": "default",
-				"selector": [
-					{
-						"filenamePattern": "*.github-graphql-nb"
-					}
-				]
 			}
 		]
 	},
