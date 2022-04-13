@@ -34,7 +34,7 @@
 				"github-graphql-nb.scopes": {
 					"type": "array",
 					"default": [ "repo", "workflow" ],
-					"markdownDescription": "The authentication scopes to request when signing into GitHub. See [Available Scopes](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes) in Github Documentation for more information.",
+					"markdownDescription": "The authentication scopes to request when signing into GitHub. See [Available Scopes](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes) in GitHub Documentation for more information.",
 					"source": "resource"
 				}
 			}
