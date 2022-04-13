@@ -18,7 +18,9 @@
 		"GitHub",
 		"GraphQL"
 	],
-	"extensionDependencies": ["joyceerhl.vscode-graphql-notebook"],
+	"extensionDependencies": [
+		"joyceerhl.vscode-graphql-notebook"
+	],
 	"activationEvents": [
 		"onNotebook:gqlnb",
 		"onNotebook:github-graphql-nb"
@@ -26,21 +28,32 @@
 	"browser": "./dist/browser/extension",
 	"main": "./dist/extension",
 	"contributes": {
+		"configuration": {
+			"title": "GitHub GraphQL Notebooks",
+			"properties": {
+				"github-graphql-nb.scopes": {
+					"type": "array",
+					"default": [ "repo", "workflow" ],
+					"markdownDescription": "The authentication scopes to request when signing into GitHub. See [Available Scopes](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes) in Github Documentation for more information.",
+					"source": "resource"
+				}
+			}
+		},
 		"languages": [
 			{
-			  "id": "graphql",
-			  "aliases": [
-				"GraphQL",
-				"graphql"
-			  ],
-			  "configuration": "./language/language-configuration.json"
+				"id": "graphql",
+				"aliases": [
+					"GraphQL",
+					"graphql"
+				],
+				"configuration": "./language/language-configuration.json"
 			}
-		  ],
-		  "grammars": [
+		],
+		"grammars": [
 			{
-			  "language": "graphql",
-			  "path": "./grammars/graphql.json",
-			  "scopeName": "source.graphql"
+				"language": "graphql",
+				"path": "./grammars/graphql.json",
+				"scopeName": "source.graphql"
 			}
 		]
 	},

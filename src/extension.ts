@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 
-const authorizationScopes = ['repo', 'workflow'];
+const authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') as string[];
 
 const variablesRegex = /^\s*variables\s*(\{[^}]*\})\s*$/m;
 
