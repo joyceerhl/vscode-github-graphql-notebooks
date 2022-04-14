@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 
-var authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') as string[];
+var authorizationScopes = vscode.workspace.getConfiguration('githubGraphql').get('scopes') as string[];
 
 const variablesRegex = /^\s*variables\s*(\{[^}]*\})\s*$/m;
 
@@ -24,8 +24,8 @@ class OctokitController {
 	constructor() {
 		this.controller = vscode.notebooks.createNotebookController('github-graphql', 'gqlnb', 'GitHub GraphQL', (cells, notebook, c) => this.executeCells(cells, notebook, c));
 		vscode.workspace.onDidChangeConfiguration((e) => {
-			if (e.affectsConfiguration('github-graphql-nb')) {
-				authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') ?? []; // Update our cached auth scopes
+			if (e.affectsConfiguration('githubGraphql')) {
+				authorizationScopes = vscode.workspace.getConfiguration('githubGraphql').get('scopes') ?? []; // Update our cached auth scopes
 				this.clearAuthenticationSession(); // Clear out the existing auth session if requested scopes changed
 			}
 		});

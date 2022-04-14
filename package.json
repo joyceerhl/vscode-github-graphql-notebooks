@@ -6,7 +6,7 @@
 	"repository": {
 		"url": "https://github.com/joyceerhl/vscode-github-graphql-notebooks"
 	},
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.64.0"
@@ -31,7 +31,7 @@
 		"configuration": {
 			"title": "GitHub GraphQL Notebooks",
 			"properties": {
-				"github-graphql-nb.scopes": {
+				"githubGraphql.scopes": {
 					"type": "array",
 					"items": {
 						"type": "string"
