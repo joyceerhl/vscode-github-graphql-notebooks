@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 
-const authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') as string[];
+var authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') as string[];
 
 const variablesRegex = /^\s*variables\s*(\{[^}]*\})\s*$/m;
 
@@ -23,6 +23,12 @@ class OctokitController {
 
 	constructor() {
 		this.controller = vscode.notebooks.createNotebookController('github-graphql', 'gqlnb', 'GitHub GraphQL', (cells, notebook, c) => this.executeCells(cells, notebook, c));
+		vscode.workspace.onDidChangeConfiguration((e) => {
+			if (e.affectsConfiguration('github-graphql-nb')) {
+				authorizationScopes = vscode.workspace.getConfiguration('github-graphql-nb').get('scopes') ?? []; // Update our cached auth scopes
+				this.clearAuthenticationSession(); // Clear out the existing auth session if requested scopes changed
+			}
+		});
 	}
 
 	dispose() {
@@ -113,7 +119,7 @@ class OctokitController {
 		if (this._session === undefined) {
 			async function waitUntilAuthenticated() {
 				try {
-					const session = await authentication.getSession('github', authorizationScopes, {
+					const session = await authentication.getSession('github', authorizationScopes as readonly string[], {
 						createIfNone: true,
 					});
 					if (session !== undefined) {
@@ -123,7 +129,7 @@ class OctokitController {
 
 				return new Promise<AuthenticationSession>(resolve => {
 					async function getSession() {
-						const session = await authentication.getSession('github', authorizationScopes, {
+						const session = await authentication.getSession('github', authorizationScopes as readonly string[], {
 							createIfNone: true,
 						});
 						if (session !== undefined) {
