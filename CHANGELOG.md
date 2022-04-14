@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.2.0] - 2022-04-14
+
+- Thanks to @jason-dour for contributing configurable GitHub auth scopes via the `githubGraphql.scopes` setting 🎉
+
 ## [0.1.0] - 2022-04-03
 
 - Serializer has moved to the VS Code GraphQL Notebook extension, which remains compatible with VS Code for the Web. You can continue to open `*.github-graphql-nb` files with the generic GraphQL notebook serializer
